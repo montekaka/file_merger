@@ -17,7 +17,7 @@ var Toolbar = require('./Toolbar');
 var MainInterface = React.createClass({
   getInitialState: function() {
     return {
-      directory: '',
+      directory: 'Welcome',
       workbooks: [],
       myAppointments: loadApts
     }//return
@@ -44,7 +44,7 @@ var MainInterface = React.createClass({
       for (let file of files) {
         var fileExtension = file.split('.').pop();
         if( extensions.includes(fileExtension) ) {
-          var workbook = XLSX.readFile(directory+file);
+          var workbook = {"filename": file, "wb": XLSX.readFile(directory+file)};
           wbs.push(workbook);
         }
       }
@@ -68,23 +68,25 @@ var MainInterface = React.createClass({
     }
   },
 
-  deleteMessage: function(item) {
-    var allApts = this.state.myAppointments;
-    var newApts = _.without(allApts, item);
-    this.setState({
-      myAppointments: newApts
-    }); //setState
-  }, //deleteMessage
-
   render: function() {
     var myAppointments = this.state.myAppointments;
+    var directory = this.state.directory;
+    var wbs = this.state.workbooks;
+
+    wbs = wbs.map(function(item, index) {
+      return (
+        <AptList key = {index}
+          singleItem = {item}
+          whichItem = {item}
+        />
+      ) //return 
+    }.bind(this));
 
     myAppointments=myAppointments.map(function(item, index) {
       return(
         <AptList key = {index}
           singleItem = {item}
           whichItem =  {item}
-          onDelete = {this.deleteMessage}
         />
       ) // return
     }.bind(this)); //Appointments.map
@@ -99,8 +101,8 @@ var MainInterface = React.createClass({
           <div className="container">          
            <div className="row">
              <div className="appointments col-sm-12">
-               <h2 className="appointments-headline">Current Appointments</h2>
-               <ul className="item-list media-list">{myAppointments}</ul>
+               <h2 className="appointments-headline">{directory}</h2>
+               <ul className="item-list media-list">{wbs}</ul>
              </div>{/* col-sm-12 */}
            </div>{/* row */}
           </div>{/* container */}
