@@ -18,6 +18,7 @@ var MainInterface = React.createClass({
   getInitialState: function() {
     return {
       directory: '',
+      workbooks: [],
       myAppointments: loadApts
     }//return
   }, //getInitialState
@@ -34,14 +35,37 @@ var MainInterface = React.createClass({
     ipc.sendSync('openInfoWindow');
   },
 
+  getListOfFiles: function(directory){
+    var wbs = [];
+    var wthis = this;
+    fs.readdir(directory, function(err, files){
+      'use strict';
+      if (err) throw  err;
+      for (let file of files) {
+        var fileExtension = file.split('.').pop();
+        if( extensions.includes(fileExtension) ) {
+          var workbook = XLSX.readFile(directory+file);
+          wbs.push(workbook);
+        }
+      }
+
+      wthis.setState({
+        workbooks: wbs
+      });
+    })
+  },
+
   updateSelectedDirectory: function(file){
-    var filepath = file.path;
-    var filename = file.name;
-    var directory = filepath.slice(0, filepath.length - filename.length);
-    console.log(directory);
-    this.setState({
-      directory: directory
-    });
+    if(file) {
+      var filepath = file.path;
+      var filename = file.name;
+      var directory = filepath.slice(0, filepath.length - filename.length);
+      this.getListOfFiles(directory);
+      //console.log(directory);
+      this.setState({
+        directory: directory
+      });
+    }
   },
 
   deleteMessage: function(item) {
@@ -54,12 +78,6 @@ var MainInterface = React.createClass({
 
   render: function() {
     var myAppointments = this.state.myAppointments;
-
-    if(this.state.aptBodyVisible === true) {
-      $('#addAppointment').modal('show');
-    } else {
-      $('#addAppointment').modal('hide');
-    }
 
     myAppointments=myAppointments.map(function(item, index) {
       return(
