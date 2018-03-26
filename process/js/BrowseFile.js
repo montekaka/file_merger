@@ -7,11 +7,11 @@ var BrowseFile = React.createClass({
   },
   render: function() {
     return(
-      <div className="input-group mb-3">
+      <div className="input-group mb-3 browse-file">
         <div className="custom-file">
           <input type="file" placeholder="directory" id="folderName2" onChange={event => this.directoryChanged(event)  } />    
         </div>
-      </div>          
+      </div>
     ) //return
   } //render
 }); //Toolbar

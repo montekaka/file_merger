@@ -8546,3 +8546,12 @@ h6 {
   width: 100px;
   opacity: .8;
 }
+
+.tab-name-input {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.browse-file {
+  margin-top: 20px;
+}

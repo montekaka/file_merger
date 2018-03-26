@@ -14,12 +14,14 @@ var ReactDOM = require('react-dom');
 var AptList = require('./AptList');
 var Toolbar = require('./Toolbar');
 var BrowseFile = require('./BrowseFile');
+var SetDefaultTabName = require('./SetDefaultTabName');
 
 var MainInterface = React.createClass({
   getInitialState: function() {
     return {
       directory: 'Welcome',
       workbooks: [],
+      tabName: "",
       myAppointments: loadApts
     }//return
   }, //getInitialState
@@ -70,10 +72,19 @@ var MainInterface = React.createClass({
     }
   },
 
+  SetTargetTabName: function(tab_name){
+    if(tab_name){
+      this.setState({
+        tabName: tab_name
+      })
+    }
+  },
+
   render: function() {
     var myAppointments = this.state.myAppointments;
     var directory = this.state.directory;
     var wbs = this.state.workbooks;
+    var tabName = this.state.tabName;
 
     wbs = wbs.map(function(item, index) {
       return (
@@ -89,15 +100,18 @@ var MainInterface = React.createClass({
         <div className="interface">
           <Toolbar
             // handleDirDialog = {this.openDirDialog}
-            handleAbout = {this.showAbout}   
-            handleDirectoryChanged = {this.updateSelectedDirectory}      
+            handleAbout = {this.showAbout}    
           />
           <div className="container">
            <div className="row">
              <div className="appointments col-sm-12">
                <h2 className="appointments-headline">{directory}</h2>
+               <h3>Tab: {tabName}</h3>
                 <BrowseFile 
                   handleDirectoryChanged = {this.updateSelectedDirectory}
+                />
+                <SetDefaultTabName 
+                  handleSetTabName = {this.SetTargetTabName}
                 />               
                <ul className="item-list media-list">{wbs}</ul>
              </div>{/* col-sm-12 */}
