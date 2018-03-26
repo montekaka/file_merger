@@ -3,7 +3,6 @@ var _ = require('lodash');
 var bootstrap = require('bootstrap');
 var fs = eRequire('fs');
 var loadApts = JSON.parse(fs.readFileSync(dataLocation));
-var XLSX = require('xlsx');
 
 var electron = eRequire('electron');
 var path = require("path");
@@ -15,7 +14,6 @@ var ReactDOM = require('react-dom');
 var AptList = require('./AptList');
 var Toolbar = require('./Toolbar');
 
-var extensions = ['xlsx'];
 var MainInterface = React.createClass({
   getInitialState: function() {
     return {
@@ -37,9 +35,12 @@ var MainInterface = React.createClass({
   },
 
   updateSelectedDirectory: function(file){
-    var path = filepath.slice(0, filepath.length - filename.length);
+    var filepath = file.path;
+    var filename = file.name;
+    var directory = filepath.slice(0, filepath.length - filename.length);
+    console.log(directory);
     this.setState({
-      directory: path
+      directory: directory
     });
   },
 
