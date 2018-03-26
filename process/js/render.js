@@ -3,65 +3,95 @@ var _ = require('lodash');
 var bootstrap = require('bootstrap');
 var fs = eRequire('fs');
 var loadApts = JSON.parse(fs.readFileSync(dataLocation));
+var XLSX = require('xlsx');
+
+var electron = eRequire('electron');
+var path = require("path");
+
+var ipc = electron.ipcRenderer;
 
 var React = require('react');
 var ReactDOM = require('react-dom');
 var AptList = require('./AptList');
+var Toolbar = require('./Toolbar');
 
+var extensions = ['xlsx'];
 var MainInterface = React.createClass({
   getInitialState: function() {
     return {
+      directory: '',
       myAppointments: loadApts
-    } //return
-  }, // getInitialState
+    }//return
+  }, //getInitialState
 
-  componentDidUpdate: function(){
-    fs.writeFile(dataLocation, JSON.stringify(this.state.myAppointments), 'utf8'
-      , function(err){
-        if(err){
-          console.log(err);
-        }
-    }); //write file
-  }, // componentDidUpdate
+  componentDidUpdate: function() {
+    fs.writeFile(dataLocation, JSON.stringify(this.state.myAppointments), 'utf8', function(err) {
+      if (err) {
+        console.log(err);
+      }
+    });//writeFile
+  }, //componentDidUpdate
+
+  showAbout:function() {
+    ipc.sendSync('openInfoWindow');
+  },
+
+  updateSelectedDirectory: function(file){
+    var path = filepath.slice(0, filepath.length - filename.length);
+    this.setState({
+      directory: path
+    });
+  },
 
   deleteMessage: function(item) {
     var allApts = this.state.myAppointments;
-    var newApts = _.without(allApts, item); // return ary without item
+    var newApts = _.without(allApts, item);
     this.setState({
       myAppointments: newApts
-    });
-  },
-  render: function(){
+    }); //setState
+  }, //deleteMessage
+
+  render: function() {
     var myAppointments = this.state.myAppointments;
 
-    myAppointments = myAppointments.map(function(item, index){
-      return (
+    if(this.state.aptBodyVisible === true) {
+      $('#addAppointment').modal('show');
+    } else {
+      $('#addAppointment').modal('hide');
+    }
+
+    myAppointments=myAppointments.map(function(item, index) {
+      return(
         <AptList key = {index}
           singleItem = {item}
-          whichItem = {item}
+          whichItem =  {item}
           onDelete = {this.deleteMessage}
-        />        
-      ) // return 
-    }.bind(this)); // myAppointments.map
-
+        />
+      ) // return
+    }.bind(this)); //Appointments.map
     return(
-       <div className="application">
-          <div className="container">
+      <div className="application">
+        <div className="interface">
+          <Toolbar
+            // handleDirDialog = {this.openDirDialog}
+            handleAbout = {this.showAbout}   
+            handleDirectoryChanged = {this.updateSelectedDirectory}      
+          />
+          <div className="container">          
            <div className="row">
              <div className="appointments col-sm-12">
                <h2 className="appointments-headline">Current Appointments</h2>
-               <ul className="item-list media-list">
-                {myAppointments}
-               </ul>
+               <ul className="item-list media-list">{myAppointments}</ul>
              </div>{/* col-sm-12 */}
            </div>{/* row */}
           </div>{/* container */}
-        </div>    
+        </div>{/* interface */}
+      </div>
     );
-  }
-}); // MainInterface
+  } //render
+});//MainInterface
 
 ReactDOM.render(
   <MainInterface />,
   document.getElementById('petAppointments')
-);
+); //render
