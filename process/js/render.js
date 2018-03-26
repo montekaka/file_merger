@@ -13,6 +13,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var AptList = require('./AptList');
 var Toolbar = require('./Toolbar');
+var BrowseFile = require('./BrowseFile');
 
 var MainInterface = React.createClass({
   getInitialState: function() {
@@ -36,6 +37,7 @@ var MainInterface = React.createClass({
   },
 
   getListOfFiles: function(directory){
+    // custom value 
     var wbs = [];
     var wthis = this;
     fs.readdir(directory, function(err, files){
@@ -82,14 +84,6 @@ var MainInterface = React.createClass({
       ) //return 
     }.bind(this));
 
-    myAppointments=myAppointments.map(function(item, index) {
-      return(
-        <AptList key = {index}
-          singleItem = {item}
-          whichItem =  {item}
-        />
-      ) // return
-    }.bind(this)); //Appointments.map
     return(
       <div className="application">
         <div className="interface">
@@ -98,10 +92,13 @@ var MainInterface = React.createClass({
             handleAbout = {this.showAbout}   
             handleDirectoryChanged = {this.updateSelectedDirectory}      
           />
-          <div className="container">          
+          <div className="container">
            <div className="row">
              <div className="appointments col-sm-12">
                <h2 className="appointments-headline">{directory}</h2>
+                <BrowseFile 
+                  handleDirectoryChanged = {this.updateSelectedDirectory}
+                />               
                <ul className="item-list media-list">{wbs}</ul>
              </div>{/* col-sm-12 */}
            </div>{/* row */}

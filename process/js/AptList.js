@@ -1,4 +1,5 @@
 var React = require('react');
+var SheetList = require('./SheetList');
 
 var AptList = React.createClass({
   render: function() {
@@ -6,7 +7,17 @@ var AptList = React.createClass({
     var workbook = this.props.singleItem.wb;    
     var sheetNames = workbook.SheetNames;
     var numberOfsheets = sheetNames.length;
-    console.log(sheetNames);
+
+    var sheetNamesList = sheetNames.map(function(item, index) {
+      return (
+        <SheetList key = {index}
+          idx = {index}
+          sheetName = {item}
+        />
+      ) //return 
+    }.bind(this));
+
+    //console.log(sheetNames);
     return (
      <li className="pet-item media">
        <div className="pet-info media-body">
@@ -14,8 +25,12 @@ var AptList = React.createClass({
            <span className="pet-name">{filename}</span>
          </div>
          <div className="owner-name"><span className="label-item">Number of Tabs:</span>{numberOfsheets}</div>
-         <div className="apt-notes">{numberOfsheets}</div>
-       </div>
+         <table className="table">
+          <tbody>
+            <tr>{sheetNamesList}</tr>            
+          </tbody>          
+         </table>          
+       </div>      
      </li>  
     )
   }
