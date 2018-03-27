@@ -80,8 +80,8 @@ var MainInterface = React.createClass({
 
   SetTargetTabName: function(tab_name){
     if(tab_name){
-      tab_name = tab_name.replace(/\s+/g, '');
-      var selector = ".worksheet-"+tab_name;
+      var class_tab_name = tab_name.replace(/\s+/g, '');
+      var selector = ".worksheet-"+class_tab_name;
 
       $(selector).css("color", "red");
       $(selector).css("border-style", "solid");
@@ -117,14 +117,8 @@ var MainInterface = React.createClass({
      var wb = {SheetNames: [], Sheets:{}};
      wb.SheetNames.push(tab_name);
      wb.Sheets[tab_name] = ws;
-     console.log("saving....");
-     // XLSX.writeFile(wb, combineFileName, function(){
-     //  console.log('finished');
-     // });
-     XLSX.writeFileAsync(combineFileName, wb, function(){
-      //console.log('finished');
-      alert('finished');
-     })
+     console.log("start saving....");  
+     XLSX.writeFile(wb, combineFileName);
   },
 
   render: function() {

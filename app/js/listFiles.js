@@ -1,6 +1,7 @@
 var fs = eRequire('fs');
 var extensions = ['xlsx','xls','xlsm','xlsb','xml','csv'];
 var XLSX = require('xlsx');
+
 //var path = '/Users/joshchen1985/desktop/merging/';
 
 // fs.readdir(path, function(err, files){	
