@@ -27,7 +27,8 @@ var MainInterface = React.createClass({
         "Title": "CombineWB",
         "Author": "DSS",
         "CreatedDate": new Date()
-      }
+      },
+      expectedRecords:0
     }//return
   }, //getInitialState
 
@@ -79,8 +80,19 @@ var MainInterface = React.createClass({
 
   SetTargetTabName: function(tab_name){
     if(tab_name){
+      tab_name = tab_name.replace(/\s+/g, '');
+      var selector = ".worksheet-"+tab_name;
+
+      $(selector).css("color", "red");
+      $(selector).css("border-style", "solid");
+      var sum = 0;
+      $(selector).each(function(){
+        sum += parseFloat($(this).text());
+      });
+      
       this.setState({
-        tabName: tab_name
+        tabName: tab_name,
+        expectedRecords: sum
       });
       //this.createWorkbook(tab_name);
     }
@@ -113,6 +125,7 @@ var MainInterface = React.createClass({
     var directory = this.state.directory;
     var wbs = this.state.workbooks;
     var tabName = this.state.tabName;
+    var expectedRecords = this.state.expectedRecords;
 
     wbs = wbs.map(function(item, index) {
       return (
@@ -135,6 +148,7 @@ var MainInterface = React.createClass({
              <div className="appointments col-sm-12">
                <h2 className="appointments-headline">{directory}</h2>
                <h3>Tab: {tabName}</h3>
+               <h4>Final Workbook Records: {expectedRecords}</h4>
                 <BrowseFile 
                   handleDirectoryChanged = {this.updateSelectedDirectory}
                 />

@@ -12,17 +12,19 @@ var AptList = React.createClass({
     var numberOfsheets = sheetNames.length;
     
     for(var i = 0; i < sheetNames.length; i++){
-      var sheetName = sheetNames[i];
+      var sheetName = sheetNames[i];      
       var worksheet = worksheets[sheetName];
-      worksheet = XLSX.utils.sheet_to_json(worksheet)
-      ws.push(worksheet.length);
+      worksheet = XLSX.utils.sheet_to_json(worksheet);
+      sheetName = sheetName.replace(/\s+/g, '');
+      ws.push({"name":"worksheet-"+sheetName, "rows": worksheet.length});
     }
 
     var sheetDetailList = ws.map(function(item, index) {
       return (
         <SheetDetail key = {index}
           idx = {index}
-          sheetRecords = {item}
+          sheetRecords = {item.rows}
+          sheetName = {item.name}
         />
       ) //return
     }.bind(this));
