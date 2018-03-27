@@ -6,7 +6,7 @@ var SheetList = React.createClass({
     var idx = this.props.idx;
     //console.log(sheetNames);
     return (      
-      <td key={idx}>{sheetName}</td>
+      <th key={idx}>{sheetName}</th>
     );
   }
 });

@@ -1,12 +1,31 @@
 var React = require('react');
 var SheetList = require('./SheetList');
+var SheetDetail = require('./SheetDetail');
 
 var AptList = React.createClass({
   render: function() {
     var filename = this.props.singleItem.filename;
-    var workbook = this.props.singleItem.wb;    
+    var workbook = this.props.singleItem.wb;
+    var worksheets = workbook.Sheets;  
+    var ws = [];  
     var sheetNames = workbook.SheetNames;
     var numberOfsheets = sheetNames.length;
+    
+    for(var i = 0; i < sheetNames.length; i++){
+      var sheetName = sheetNames[i];
+      var worksheet = worksheets[sheetName];
+      worksheet = XLSX.utils.sheet_to_json(worksheet)
+      ws.push(worksheet.length);
+    }
+
+    var sheetDetailList = ws.map(function(item, index) {
+      return (
+        <SheetDetail key = {index}
+          idx = {index}
+          sheetRecords = {item}
+        />
+      ) //return
+    }.bind(this));
 
     var sheetNamesList = sheetNames.map(function(item, index) {
       return (
@@ -17,6 +36,8 @@ var AptList = React.createClass({
       ) //return 
     }.bind(this));
 
+
+
     //console.log(sheetNames);
     return (
      <li className="pet-item media">
@@ -26,9 +47,18 @@ var AptList = React.createClass({
          </div>
          <div className="owner-name"><span className="label-item">Number of Tabs:</span>{numberOfsheets}</div>
          <table className="table">
+          <thead>            
+            <tr>
+              <th>#</th>
+              {sheetNamesList}
+            </tr>            
+          </thead>        
           <tbody>
-            <tr>{sheetNamesList}</tr>            
-          </tbody>          
+            <tr>
+              <td>Number of records</td>
+              {sheetDetailList}
+            </tr>
+          </tbody>
          </table>          
        </div>      
      </li>  

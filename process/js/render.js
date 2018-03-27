@@ -82,7 +82,7 @@ var MainInterface = React.createClass({
       this.setState({
         tabName: tab_name
       });
-      this.createWorkbook(tab_name);
+      //this.createWorkbook(tab_name);
     }
   },
 
