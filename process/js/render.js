@@ -22,7 +22,12 @@ var MainInterface = React.createClass({
       directory: 'Welcome',
       workbooks: [],
       tabName: "",
-      myAppointments: loadApts
+      myAppointments: loadApts,
+      combineWB: {
+        "Title": "CombineWB",
+        "Author": "DSS",
+        "CreatedDate": new Date()
+      }
     }//return
   }, //getInitialState
 
@@ -64,7 +69,7 @@ var MainInterface = React.createClass({
       var filepath = file.path;
       var filename = file.name;
       var directory = filepath.slice(0, filepath.length - filename.length);
-      this.getListOfFiles(directory);
+      this.getListOfFiles(directory);      
       //console.log(directory);
       this.setState({
         directory: directory
@@ -76,8 +81,31 @@ var MainInterface = React.createClass({
     if(tab_name){
       this.setState({
         tabName: tab_name
-      })
+      });
+      this.createWorkbook(tab_name);
     }
+  },
+
+  createWorkbook: function(tab_name){
+    var workbooks = this.state.workbooks;    
+    var directory = this.state.directory;
+    var combineFileName = directory+'combined.xlsx';
+    var combinedData = [];
+
+     
+    for(let file of workbooks){   
+      var workbook = file['wb'];
+      var ws = workbook.Sheets[tab_name];
+      var data = XLSX.utils.sheet_to_json(ws);
+      combinedData = combinedData.concat(data); 
+    } 
+
+     var ws = XLSX.utils.json_to_sheet(combinedData);
+     var wb = {SheetNames: [], Sheets:{}};
+     wb.SheetNames.push(tab_name);
+     wb.Sheets[tab_name] = ws;
+     console.log("saving....");
+     XLSX.writeFile(wb, combineFileName);
   },
 
   render: function() {
