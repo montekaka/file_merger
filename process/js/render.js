@@ -94,7 +94,7 @@ var MainInterface = React.createClass({
         tabName: tab_name,
         expectedRecords: sum
       });
-      //this.createWorkbook(tab_name);
+      this.createWorkbook(tab_name);
     }
   },
 
@@ -117,7 +117,13 @@ var MainInterface = React.createClass({
      wb.SheetNames.push(tab_name);
      wb.Sheets[tab_name] = ws;
      console.log("saving....");
-     XLSX.writeFile(wb, combineFileName);
+     // XLSX.writeFile(wb, combineFileName, function(){
+     //  console.log('finished');
+     // });
+     
+     XLSX.writeFileAsync(combineFileName, wb, function(){
+      console.log('finished');
+     })
   },
 
   render: function() {
