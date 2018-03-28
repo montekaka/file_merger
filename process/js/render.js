@@ -59,7 +59,7 @@ var MainInterface = React.createClass({
         }
       }
 
-      this.setState({
+      wthis.setState({
         workbooks: wbs
       });
     })
