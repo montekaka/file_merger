@@ -1,13 +1,13 @@
-#Excel Merger
+# Excel Merger
 
-##Setup
+## Setup
 1. Download and instsall the [NPM](https://www.npmjs.com/)
 2. run `npm install`
 
-##Developing
+## Developing
 1. run `gulp` from the terminal
 
-##Packaging the application
+## Packaging the application
 
 1. Install *electron-packager* Globally
 `npm install electron-packager --save-dev`
