@@ -10,8 +10,8 @@
 ## Packaging the application
 
 1. Install *electron-packager* Globally
-`npm install electron-packager --save-dev`
-`npm install electron-packager -g`
+⋅⋅* `npm install electron-packager --save-dev`
+⋅⋅* `npm install electron-packager -g`
 
 2. Packaging the application
 `npm run pack`
