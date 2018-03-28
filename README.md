@@ -14,4 +14,4 @@
   * `npm install electron-packager -g`
 
 2. Packaging the application
-  `npm run pack`
+  * `npm run pack`
